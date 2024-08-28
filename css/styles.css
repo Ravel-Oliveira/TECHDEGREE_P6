@@ -50,6 +50,7 @@ button {
   font-size: var(--font-size-medium);
   background-color: var(--color-keys-light);
   border-radius: 5px;
+  cursor: pointer;
   -webkit-transition: var(--transition);
   -o-transition: var(--transition);
   transition: var(--transition);
