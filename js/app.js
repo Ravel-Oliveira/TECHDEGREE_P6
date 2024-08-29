@@ -9,24 +9,13 @@ let phrases = ['Casablanca', 'The Godfather', 'Citizen Kane', 'Seven Samurai',
 const overlay = document.getElementById('overlay');
 const btnReset = document.querySelector('.btn__reset');
 
-
-// function startGame() {
-//     btnReset.parentNode.style.display = 'none';
-//     addPhraseToDisplay(getRandomPhrase(phrases));
-// }
-
+//Start game function
 function startGame() {
     overlay.style.display = 'none';
     addPhraseToDisplay(getRandomPhrase(phrases));
 };
 
-function resetGame() {
-    resetPhrase();
-    resetKeyrow();
-    resetHearts();
-    missed = 0;
-};
-
+//remove the previous phrase from the document
 function resetPhrase() {
     let li = phrase.querySelectorAll('li');
     for (let i = 0; i < li.length; i++) {
@@ -34,6 +23,7 @@ function resetPhrase() {
     }
 };
 
+//remove the 'chosen' class from the chosen keyrows`s buttons
 function resetKeyrow() {
     let keyBoard = qwerty.querySelectorAll('button');
     for (let i = 0; i < keyBoard.length; i++) {
@@ -43,19 +33,29 @@ function resetKeyrow() {
     }
 };
 
+//Reset the hearts src to liveHearts again, for 5 chances
 function resetHearts() {
     for (let i = 0; i < tries.length; i++) {
         tries[i].src = 'images/liveHeart.png';
     }
 };
 
+//Function that resets the game
+function resetGame() {
+    resetPhrase();
+    resetKeyrow();
+    resetHearts();
+    missed = 0;
+};
+
+//Select one phrase from an array
 function getRandomPhrase(arr) {
     const randomIndex = Math.floor(Math.random() * arr.length);
     let randomPhrase = arr[randomIndex].split('');
     return randomPhrase;
 };
 
-
+//Split the selected phrase array and put each index in a li
 function addPhraseToDisplay(arr) {
     let ul = phrase.querySelector('ul');
     for (let i = 0; i < arr.length; i++) {
@@ -70,6 +70,7 @@ function addPhraseToDisplay(arr) {
     }
 };
 
+//Check if the letter from the selected keyrow button matchs with any letter from the phrase on the ul section
 function checkLetter(btn) {
     const displayPhrase = document.querySelectorAll('.letter');
     const btnText = btn.innerText;
@@ -84,7 +85,7 @@ function checkLetter(btn) {
     return letterFound;
 };
 
-
+//check if the chosen letter was correct or not, if it was wrong remove a heart and add a missed chance
 function checkScore(score) {
     if (score === null) {
         tries[missed].src = 'images/lostHeart.png';
@@ -93,6 +94,8 @@ function checkScore(score) {
     }
 };
 
+//Removes the start game button from the overlay, puts a new one to start a new game, put a text to inform if the palyer lost or won
+//changes the bg color of the overlay to match the game result and put the overlay on display again
 function endGame(text, button, result) {
     gameResult.innerText = text;
     gameResult.style.display = '';
@@ -105,25 +108,20 @@ function endGame(text, button, result) {
     overlay.style.display = '';
 };
 
+//check if the player lost all chances or got all letters right, than pass the correspondent parameters to the endGame function with a delay
 function checkWin() {
     const letters = phrase.getElementsByClassName('letter');
     const lettersClass = phrase.getElementsByClassName('show');
     if (letters.length === lettersClass.length) {
-        endGame('Well done. You WON!!', 'Play again', 'win')
+        setTimeout(() => {  endGame('Well done. You WON!!', 'Play again', 'win'); }, 700);
     } else if (missed === 5) {
-        endGame('Too bad. You LOST =(', 'Try again', 'lose')
+        setTimeout(() => {  endGame('Too bad. You LOST =(', 'Try again', 'lose'); }, 700);
     }
 };
 
 
-
 //All evetListerners
-
-//Start game button
-// btnReset.addEventListener('click', () => {
-//     startGame();
-// })
-
+//EventListener to start the game and a new game
 overlay.addEventListener('click', (evt) => {
     let e = evt.target;
     if (e.tagName === 'A') {
@@ -132,7 +130,7 @@ overlay.addEventListener('click', (evt) => {
     }
 });
 
-//Keyrow events
+//Keyrow events that check the letters match, the score and if the player won or lost
 qwerty.addEventListener('click', (evt) => {
     let e = evt.target;
     if (e.tagName === 'BUTTON') {
@@ -140,5 +138,4 @@ qwerty.addEventListener('click', (evt) => {
         checkScore(checkLetter(e))
         checkWin()
     } 
-    console.log(missed);
 });
