@@ -29,6 +29,7 @@ function resetKeyrow() {
     for (let i = 0; i < keyBoard.length; i++) {
         if (keyBoard[i].classList.contains('chosen')) {
             keyBoard[i].classList.remove('chosen');
+            keyBoard[i].disabled = false;
         }    
     }
 };
@@ -75,6 +76,7 @@ function checkLetter(btn) {
     const displayPhrase = document.querySelectorAll('.letter');
     const btnText = btn.innerText;
     btn.classList.add('chosen');
+    btn.disabled = true;
     let letterFound = null;
     for (let i = 0; i < displayPhrase.length; i++) { 
         if (btnText.toLowerCase() === displayPhrase[i].innerText.toLowerCase()) {
